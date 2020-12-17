@@ -1,2 +1,3 @@
 # 💎Study-React-Native
-Study React-Naitve and Make a App(Android, iOS)
+📘Study React-Naitve
+💨Make a App(Android, iOS)
