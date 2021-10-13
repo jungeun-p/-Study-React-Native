@@ -20,8 +20,14 @@ const App = () => {
 
   const onAddRandomNum = () => {
     const randomNum = Math.floor(Math.random() * 100) + 1;
-    setNum(...num, randomNum);
+    setNum(state => [...state, randomNum]);
   };
+
+  const onNumDelete = position => {
+    const newArray = num.filter((num, index) => position !== index);
+    setNum(newArray);
+  };
+
   return (
     <View style={styles.mainView}>
       <Header name={this.state.appName} />
@@ -31,7 +37,7 @@ const App = () => {
         </Text>
       </View>
       <Generator onAddRandomNum={onAddRandomNum} />
-      <NumList num={num} />
+      <NumList num={num} onNumDelete={onNumDelete} />
     </View>
   );
 };
