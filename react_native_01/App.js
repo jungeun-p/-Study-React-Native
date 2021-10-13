@@ -6,20 +6,32 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import Header from './src/header';
+import Generator from './src/generator';
+import NumList from './src/numlist';
 
 const App = () => {
   state = {
     appName: 'My First App',
   };
+  const [num, setNum] = useState([43, 25]);
+
+  const onAddRandomNum = () => {
+    const randomNum = Math.floor(Math.random() * 100) + 1;
+    setNum(...num, randomNum);
+  };
   return (
     <View style={styles.mainView}>
-      {/* <Header name={this.state.appName} /> */}
-      <Text style={styles.mainText} onPress={() => alert('text touch event')}>
-        HelloWorld
-      </Text>
+      <Header name={this.state.appName} />
+      <View>
+        <Text style={styles.mainText} onPress={() => alert('text touch event')}>
+          HelloWorld
+        </Text>
+      </View>
+      <Generator onAddRandomNum={onAddRandomNum} />
+      <NumList num={num} />
     </View>
   );
 };
@@ -30,7 +42,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingTop: 50,
     alignItems: 'center',
-    justifyContent: 'center',
+    // justifyContent: 'center',
   },
   subView: {
     backgroundColor: 'yellow',
