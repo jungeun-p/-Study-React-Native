@@ -14,12 +14,15 @@ import {
   TextInput,
   ScrollView,
   Text,
+  Image,
 } from 'react-native';
 import Header from './src/header';
 import Generator from './src/generator';
 import NumList from './src/numlist';
 import Input from './src/input';
 import PickerComponent from './src/picker';
+import V from './assets/images/V.jpeg';
+import Modal from './src/modal';
 
 const App = () => {
   // state = {
@@ -60,7 +63,15 @@ const App = () => {
 
   return (
     <View style={styles.mainView}>
-      <PickerComponent />
+      <Modal />
+      {/* <Image
+        style={styles.image}
+        source={V}
+        // source={{uri: 'https://picsum.photos/seed/picsum/200/400'}}
+        // onLoadEnd={() => alert('Image Loaded!!')}
+        resizeMode="contain"
+      /> */}
+      {/* <PickerComponent /> */}
       {/* <Header name={this.state.appName} />
       <View>
         <Text style={styles.mainText} onPress={() => alert('text touch event')}>
@@ -132,6 +143,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize: 25,
     padding: 10,
+  },
+  image: {
+    width: '100%',
+    height: 700,
   },
 });
 
