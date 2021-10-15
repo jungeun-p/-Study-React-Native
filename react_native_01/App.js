@@ -19,6 +19,7 @@ import Header from './src/header';
 import Generator from './src/generator';
 import NumList from './src/numlist';
 import Input from './src/input';
+import PickerComponent from './src/picker';
 
 const App = () => {
   // state = {
@@ -30,9 +31,9 @@ const App = () => {
     alphabet: ['a', 'b', 'c', 'd'],
   });
 
-  const onChange = event => {
+  const onChangeInput = e => {
     // event라는 인자를 받아와, textInput 값을 업데이트.
-    setText({myTextInput: event});
+    setText(state => ({...state, myTextInput: e}));
   };
 
   // const onAddRandomNum = () => {
@@ -47,20 +48,25 @@ const App = () => {
 
   const onAddTextInput = () => {
     setText(state => ({
-      ...state,
       myTextInput: '',
       alphabet: [...state.alphabet, state.myTextInput],
     }));
+    // setText(state => ({
+    //   ...state,
+    //   myTextInput: '',
+    //   alphabet: [...state.alphabet, state.myTextInput],
+    // }));
   };
 
   return (
     <View style={styles.mainView}>
+      <PickerComponent />
       {/* <Header name={this.state.appName} />
       <View>
         <Text style={styles.mainText} onPress={() => alert('text touch event')}>
           HelloWorld
         </Text>
-      </View>
+      </View>s
       <Generator onAddRandomNum={onAddRandomNum} />
       <ScrollView
         style={{width: '100%'}}
@@ -71,21 +77,22 @@ const App = () => {
         bounces={true}>
         <NumList num={num} onNumDelete={onNumDelete} />
       </ScrollView> */}
-      <TextInput
+      {/* <TextInput
         style={styles.input}
-        onChangeText={onChange}
+        onChangeText={onChangeInput}
         value={text.myTextInput}
+        name="myTextInput"
         multiline={true}
-        maxLength={10}
+        // maxLength={10}
       />
-      <Button title="Add Text Input" />
+      <Button title="Add Text Input" onPress={onAddTextInput} />
       <ScrollView style={{width: '100%'}}>
-        {/* {text.alphabet.map((item, idx) => (
+        {text.alphabet.map((item, idx) => (
           <Text key={idx} style={styles.mainText}>
             {item}
           </Text>
-        ))} */}
-      </ScrollView>
+        ))}
+      </ScrollView> */}
     </View>
   );
 };
