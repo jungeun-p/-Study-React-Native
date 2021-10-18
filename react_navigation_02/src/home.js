@@ -9,7 +9,23 @@ const HomeScreen = ({navigation}) => {
       <Button
         title="To User Screen"
         onPress={() => {
-          navigation.navigate('User');
+          navigation.navigate('User', {
+            userIdx: 100,
+            userName: 'Seokjin',
+            userLastName: 'Kim',
+          });
+        }}
+      />
+      <Button
+        title="Change the Title"
+        onPress={() => {
+          navigation.setOptions({
+            title: 'Changed!!!',
+            headerStyle: {
+              backgroundColor: 'pink',
+            },
+            headerTintColor: 'red',
+          });
         }}
       />
     </View>
