@@ -1,5 +1,4 @@
 import React from 'react';
-import 'react-native-gesture-handler';
 import {Text, View, Button} from 'react-native';
 
 const UserScreen = ({navigation, route}) => {
