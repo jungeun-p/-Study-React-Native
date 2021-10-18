@@ -23,25 +23,26 @@ import LogoTitle from './src/logo';
 import HomeDrawer from './src/home_drawer';
 import UserDrawer from './src/user_drawer';
 import Ham from './src/assets/pics/Ham.jpeg';
+import MyDrawer from './src/my_drawer';
 
 const Stack = createStackNavigator();
 // navigation prop을 각각의 Screen 컴포넌트에 전달.
 const Drawer = createDrawerNavigator();
 
 const App = () => {
-  const CustomDrawerContent = props => {
-    return (
-      <DrawerContentScrollView {...props}>
-        <DrawerItemList {...props} />
-        <DrawerItem
-          label="Help"
-          onPress={() => Linking.openURL('http://www.google.com')}
-          icon={() => <LogoTitle />}
-        />
-        <DrawerItem label="Info" onPress={() => alert('Info Window')} />
-      </DrawerContentScrollView>
-    );
-  };
+  // const CustomDrawerContent = props => {
+  //   return (
+  //     <DrawerContentScrollView {...props}>
+  //       <DrawerItemList {...props} />
+  //       <DrawerItem
+  //         label="Help"
+  //         onPress={() => Linking.openURL('http://www.google.com')}
+  //         icon={() => <LogoTitle />}
+  //       />
+  //       <DrawerItem label="Info" onPress={() => alert('Info Window')} />
+  //     </DrawerContentScrollView>
+  //   );
+  // };
   return (
     <NavigationContainer>
       <Drawer.Navigator
@@ -57,7 +58,10 @@ const App = () => {
           drawerActiveBackgroundColor: 'blue',
         }}
         // drawerContent를 렌더링하기 위핸 리액트 요소를 반환.
-        drawerContent={props => <CustomDrawerContent {...props} />}>
+        drawerContent={props => (
+          //<CustomDrawerContent {...props} />
+          <MyDrawer {...props} />
+        )}>
         <Drawer.Screen
           name="Home"
           component={HomeDrawer}
