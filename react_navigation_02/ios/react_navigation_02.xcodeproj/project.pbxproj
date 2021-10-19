@@ -12,6 +12,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		5E34979BF1DE460D5493E3A5 /* libPods-react_navigation_02-react_navigation_02Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46DB3EBA1A8F0F0D6AAFD755 /* libPods-react_navigation_02-react_navigation_02Tests.a */; };
+		60D00F8D271F014900CF6E54 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 60D00F8C271F014900CF6E54 /* Ionicons.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		AA8DBC5537F7E289BDE020A8 /* libPods-react_navigation_02.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CC85E8DD0F56BBC9398C358 /* libPods-react_navigation_02.a */; };
 /* End PBXBuildFile section */
@@ -37,6 +38,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = react_navigation_02/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = react_navigation_02/main.m; sourceTree = "<group>"; };
 		46DB3EBA1A8F0F0D6AAFD755 /* libPods-react_navigation_02-react_navigation_02Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-react_navigation_02-react_navigation_02Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		60D00F8C271F014900CF6E54 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = react_navigation_02/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8A8B5AF38FACDA8E0EBB6C6B /* Pods-react_navigation_02-react_navigation_02Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-react_navigation_02-react_navigation_02Tests.debug.xcconfig"; path = "Target Support Files/Pods-react_navigation_02-react_navigation_02Tests/Pods-react_navigation_02-react_navigation_02Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		8CC85E8DD0F56BBC9398C358 /* libPods-react_navigation_02.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-react_navigation_02.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,6 +88,7 @@
 		13B07FAE1A68108700A75B9A /* react_navigation_02 */ = {
 			isa = PBXGroup;
 			children = (
+				60D00F8B271F00D000CF6E54 /* Fonts */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -104,7 +107,6 @@
 				8A8B5AF38FACDA8E0EBB6C6B /* Pods-react_navigation_02-react_navigation_02Tests.debug.xcconfig */,
 				AFA3A40BF380CE08AF62F9EB /* Pods-react_navigation_02-react_navigation_02Tests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -116,6 +118,14 @@
 				46DB3EBA1A8F0F0D6AAFD755 /* libPods-react_navigation_02-react_navigation_02Tests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		60D00F8B271F00D000CF6E54 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				60D00F8C271F014900CF6E54 /* Ionicons.ttf */,
+			);
+			name = Fonts;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -245,6 +255,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				60D00F8D271F014900CF6E54 /* Ionicons.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
