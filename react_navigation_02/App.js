@@ -130,7 +130,7 @@ const HeaderRight = () => {
     <View style={{flexDirection: 'row', paddingRight: 15}}>
       <TouchableOpacity
         onPress={() => {
-          navigation.disaptch(DrawerActions.openDrawer());
+          navigation.dispatch(DrawerActions.openDrawer());
         }}>
         <Text>Open</Text>
       </TouchableOpacity>
@@ -165,6 +165,14 @@ const App = () => {
         <Stack.Screen name="Home_Stack" component={StackHomeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
+
+    // Nesting Navigators(Stack+Tab)
+    // <NavigationContainer>
+    //   <Stack.Navigator>
+    //     <Stack.Screen name="Main" component={MainScreen} />
+    //     <Stack.Screen name="Home_Stack" component={StackHomeScreen} />
+    //   </Stack.Navigator>
+    // </NavigationContainer>
 
     // Tab
     // <NavigationContainer>
