@@ -44,6 +44,10 @@ const AniTwo = () => {
         <View style={styles.blue}></View>
       </Animated.View>
       <Button title="Animation Start" onPress={runAnimation} />
+      <Button
+        title="Check the console"
+        onPress={() => console.log('Buttton Touched!')}
+      />
     </View>
   );
 };
