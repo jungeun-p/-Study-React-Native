@@ -10,8 +10,14 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-navigation/native": "github:react-navigation/native",
+    "axios": "^0.24.0",
     "react": "17.0.2",
-    "react-native": "0.66.1"
+    "react-native": "0.66.1",
+    "react-native-gesture-handler": "^1.10.3",
+    "react-redux": "^7.2.6",
+    "redux": "^4.1.2",
+    "redux-promise": "^0.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
