@@ -10,13 +10,12 @@
 import React from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
+import {RootNavigator} from './routes';
 
 const App = () => {
   return (
     <NavigationContainer>
-      <View style={styles.main}>
-        <Text>🐹Hamster</Text>
-      </View>
+      <RootNavigator />
     </NavigationContainer>
   );
 };
