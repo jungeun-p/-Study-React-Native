@@ -13,24 +13,16 @@ const isLooggedIn = false;
 
 const AppTabComponent = () => {
   return (
-    <MainScreenTab.Navigator>
-      <MainScreenTab.Screen
-        options={{headerShown: false}}
-        name="Diary"
-        component={Diary}
-      />
-      <MainScreenTab.Screen
-        options={{headerShown: false}}
-        name="News"
-        component={News}
-      />
+    <MainScreenTab.Navigator screenOptions={{headerShown: false}}>
+      <MainScreenTab.Screen name="Diary" component={Diary} />
+      <MainScreenTab.Screen name="News" component={News} />
     </MainScreenTab.Navigator>
   );
 };
 
 export const RootNavigator = () => {
   return (
-    <AuthStack.Navigator>
+    <AuthStack.Navigator screenOptions={{headerShown: false}}>
       {isLooggedIn ? (
         <AuthStack.Screen name="Main" component={AppTabComponent} />
       ) : (
