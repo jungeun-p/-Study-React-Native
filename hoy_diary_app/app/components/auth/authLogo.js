@@ -4,11 +4,11 @@ import LogoImage from '../../assets/images/Logo.png';
 
 const LogoComponent = () => {
   return (
-    <View style={{alignItems: 'center'}}>
+    <View style={{alignItems: 'center', marginBottom: 30}}>
       <Image
         source={LogoImage}
         resizeMethod={'contain'}
-        style={{width: 80, height: 80}}
+        style={{width: 95, height: 90}}
       />
     </View>
   );
