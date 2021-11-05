@@ -7,7 +7,7 @@ const LogoComponent = () => {
     <View style={{alignItems: 'center', marginBottom: 30}}>
       <Image
         source={LogoImage}
-        resizeMethod={'contain'}
+        resizeMethod={'auto'}
         style={{width: 95, height: 90}}
       />
     </View>

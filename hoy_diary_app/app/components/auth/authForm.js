@@ -1,40 +1,62 @@
 import React, {useState} from 'react';
-import {Text, View, TextInput, StyleSheet} from 'react-native';
+import {
+  Text,
+  View,
+  TextInput,
+  StyleSheet,
+  Button,
+  Platform,
+} from 'react-native';
 import InputCommon from '../../utils/forms/input';
+import validationRules from '../../utils/forms/validationRules';
 
-const AuthForm = () => {
+const AuthForm = ({goWithoutLogin}) => {
   const [types, setTypes] = useState({
-    type: 'Login',
-    action: 'Login',
-    actionMode: 'register',
-    hasErrors: true,
+    type: 'Login', // 로그인 / 등록
+    action: 'Login', // 로그인 / 등록
+    actionMode: 'New Register', // 회원가입 / 로그인
+    hasErrors: false,
     form: {
       email: {
         value: '',
         type: 'textInput',
-        rules: {},
+        rules: {
+          isRequired: true,
+          isEmail: true,
+        },
       },
       password: {
         value: '',
         type: 'textInput',
-        rules: {},
+        rules: {
+          isRequired: true,
+          minLength: 6,
+        },
         valid: false,
       },
       confirmPassword: {
         value: '',
         type: 'textInput',
-        rules: {},
+        rules: {
+          confirmPassword: 'password',
+        },
         valid: false,
       },
     },
   });
 
+  // onchange
   const updateInput = (name, value) => {
-    setTypes({hasErrors: false});
     let formCopy = types.form;
     formCopy[name].value = value;
-    setTypes({form: formCopy});
-    console.warn(types.form);
+
+    // rules
+    let rules = formCopy[name].rules;
+    let valid = validationRules(value, rules, formCopy);
+    formCopy[name].valid = valid;
+
+    setTypes({...types, hasErrors: false, form: formCopy});
+    // console.warn(types.form);
   };
 
   // jsx 반환
@@ -59,6 +81,16 @@ const AuthForm = () => {
       </View>
     ) : null;
 
+  // login, register form 타입 변경
+  const changeForm = () => {
+    setTypes({
+      ...types,
+      type: types.type === 'Login' ? 'Register' : 'Login',
+      action: types.type === 'Login' ? 'Register' : 'Login',
+      actionMode: types.type === 'Login' ? 'Go to Login' : 'Register',
+    });
+  };
+
   return (
     <View>
       <InputCommon
@@ -81,6 +113,25 @@ const AuthForm = () => {
       />
       {conformPassword()}
       {formHasErrors()}
+      <View style={{marginTop: 40}}>
+        <View style={styles.button}>
+          <Button title={types.action} color="#48567f" />
+        </View>
+        <View style={styles.button}>
+          <Button
+            title={types.actionMode}
+            color="#48567f"
+            onPress={changeForm}
+          />
+        </View>
+        <View style={styles.button}>
+          <Button
+            title={'비회원 로그인'}
+            onPress={goWithoutLogin}
+            color="#48567f"
+          />
+        </View>
+      </View>
     </View>
   );
 };
@@ -99,6 +150,11 @@ const styles = StyleSheet.create({
     textAlignVertical: 'cneter',
     textAlign: 'center',
   },
+  button: {
+    ...Platform.select({
+      ios: {marginTop: 15},
+      android: {marginTop: 15, marginBottom: 15},
+    }),
+  },
 });
-
 export default AuthForm;

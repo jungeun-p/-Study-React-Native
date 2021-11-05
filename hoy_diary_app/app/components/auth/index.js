@@ -1,17 +1,16 @@
 import React, {useState} from 'react';
-import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {ActivityIndicator, ScrollView, StyleSheet, View} from 'react-native';
 import AuthForm from './authForm';
 import AuthLogo from './authLogo';
 // import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
-const AuthComponent = () => {
+const AuthComponent = ({navigation}) => {
   const [loading, setLoading] = useState(false);
+
+  const goWithoutLogin = () => {
+    navigation.navigate('AppTabComponent');
+  };
+
   return (
     <>
       {loading ? (
@@ -22,7 +21,7 @@ const AuthComponent = () => {
         <ScrollView style={styles.container}>
           <View>
             <AuthLogo />
-            <AuthForm />
+            <AuthForm goWithoutLogin={goWithoutLogin} />
           </View>
         </ScrollView>
       )}
