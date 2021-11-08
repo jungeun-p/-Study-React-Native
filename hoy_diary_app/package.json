@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "devtools": "react-devtools'"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "file:fortawesome/free-solid-svg-icons@forawesome/react-native-fontawesome",

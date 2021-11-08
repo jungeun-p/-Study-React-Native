@@ -1,21 +1,21 @@
 import {SIGN_IN, SIGN_UP} from '../types';
 
-export function signIn() {
+export function signIn(data) {
   return {
     type: SIGN_IN,
     payload: {
-      email: 'example@sample.com',
-      token: 'asdgdsgsbasebebdvs',
+      email: data.email,
+      token: data.password,
     },
   };
 }
 
-export function signUp() {
+export function signUp(data) {
   return {
     type: SIGN_UP,
     payload: {
-      email: 'example@sample.com',
-      token: 'asdgdsgsbasebebdvs',
+      email: data.email,
+      token: data.password,
     },
   };
 }
