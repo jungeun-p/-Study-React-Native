@@ -60,13 +60,12 @@ const AuthForm = ({goWithoutLogin}) => {
   };
 
   // jsx 반환
-  const conformPassword = () =>
+  const confirmPassword = () =>
     types.type !== 'Login' ? (
       <InputCommon
         value={types.form.confirmPassword.value}
         type={types.form.confirmPassword.type}
         secureTextEntry={true}
-        keyboardType={'email-address'}
         placeholder={'password check'}
         placeholderTextColor="#ddd"
         onChangeText={value => updateInput('confirmPassword', value)}
@@ -91,6 +90,47 @@ const AuthForm = ({goWithoutLogin}) => {
     });
   };
 
+  const submitUser = () => {
+    // Init.
+    let isFormValid = true;
+    let submittedForm = {};
+    const formCopy = types.form;
+
+    for (let key in formCopy) {
+      if (types.type === 'Login') {
+        // login, password
+        if (key !== 'confirmPassword') {
+          // 모두 true일 때 전송.
+          isFormValid = isFormValid && formCopy[key].valid;
+          // 입력된 값 저장
+          submittedForm[key] = formCopy[key].value;
+        }
+      } else {
+        // login, password, passwordcheck
+        isFormValid = isFormValid && formCopy[key].valid;
+        // 입력된 값 저장
+        submittedForm[key] = formCopy[key].value;
+      }
+    }
+    if (isFormValid) {
+      //type = login
+      if (types.type === 'Login') {
+        console.log('login: ');
+        for (let key in submittedForm) {
+          console.log(submittedForm[key]);
+        }
+        // type = register
+      } else {
+        console.log('register: ');
+        for (let key in submittedForm) {
+          console.log(submittedForm[key]);
+        }
+      }
+    } else {
+      setTypes({hasErrors: true});
+    }
+  };
+
   return (
     <View>
       <InputCommon
@@ -106,16 +146,16 @@ const AuthForm = ({goWithoutLogin}) => {
         value={types.form.password.value}
         type={types.form.password.type}
         secureTextEntry={true}
-        keyboardType={'email-address'}
         placeholder={'password'}
         placeholderTextColor="#ddd"
         onChangeText={value => updateInput('password', value)}
       />
-      {conformPassword()}
+      {confirmPassword()}
       {formHasErrors()}
+
       <View style={{marginTop: 40}}>
         <View style={styles.button}>
-          <Button title={types.action} color="#48567f" />
+          <Button title={types.action} color="#48567f" onPress={submitUser} />
         </View>
         <View style={styles.button}>
           <Button

@@ -8,7 +8,7 @@ const validation = (value, rules, form) => {
         break;
       case 'isEmail':
         valid = valid && validateEmail(value);
-        // console.log(valid);
+        // console.warn(valid);
         break;
       case 'minLength':
         valid = valid && validateMinLength(value, rules[rule]); // rules[rule]: minLength:6
