@@ -116,6 +116,7 @@ const AuthForm = ({goWithoutLogin}) => {
         submittedForm[key] = formCopy[key].value;
       }
     }
+
     if (isFormValid) {
       //type = login
       if (types.type === 'Login') {
@@ -203,8 +204,8 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchProps(dispatch) {
+function mapDispatchToProps(dispatch) {
   return bindActionCreators({signIn, signUp}, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchProps)(AuthForm);
+export default connect(mapStateToProps, mapDispatchToProps)(AuthForm);
