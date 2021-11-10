@@ -22,7 +22,7 @@ const validation = (value, rules, form) => {
         //   rules: {
         //     confirmPassword: 'password',
         //   },
-        // console.warn(valid);
+        console.log(valid);
         break;
       default:
         valid = true;

@@ -10,11 +10,12 @@ import {
 import InputCommon from '../../utils/forms/input';
 import validationRules from '../../utils/forms/validationRules';
 
-import {connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {signIn, signUp} from '../../store/actions/user_actions';
 import {bindActionCreators} from 'redux';
 
 const AuthForm = ({goWithoutLogin}) => {
+  const dispatch = useDispatch();
   const [types, setTypes] = useState({
     type: 'Login', // 로그인 / 등록
     action: 'Login', // 로그인 / 등록
@@ -99,6 +100,7 @@ const AuthForm = ({goWithoutLogin}) => {
     let isFormValid = true;
     let submittedForm = {};
     const formCopy = types.form;
+    // const {signIn, signUp} = this.props;
 
     for (let key in formCopy) {
       if (types.type === 'Login') {
@@ -120,10 +122,10 @@ const AuthForm = ({goWithoutLogin}) => {
     if (isFormValid) {
       //type = login
       if (types.type === 'Login') {
-        signIn(submittedForm);
+        dispatch(signIn(submittedForm));
         // type = register
       } else {
-        signUp(submittedForm);
+        dispatch(signUp(submittedForm));
       }
     } else {
       setTypes({hasErrors: true});
@@ -197,15 +199,15 @@ const styles = StyleSheet.create({
   },
 });
 
-function mapStateToProps(state) {
-  return {
-    // React Native props : redux.store
-    User: state.User,
-  };
-}
+// function mapStateToProps(state) {
+//   return {
+//     // React Native props : redux.store
+//     User: state.User,
+//   };
+// }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({signIn, signUp}, dispatch);
-}
+// function mapDispatchToProps(dispatch) {
+//   return bindActionCreators({signIn, signUp}, dispatch);
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AuthForm);
+export default AuthForm;
