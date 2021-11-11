@@ -13,8 +13,9 @@ import validationRules from '../../utils/forms/validationRules';
 import {useDispatch, useSelector} from 'react-redux';
 import {signIn, signUp} from '../../store/actions/user_actions';
 import {bindActionCreators} from 'redux';
+import {setTokens} from '../../utils/misc';
 
-const AuthForm = ({goWithoutLogin}) => {
+const AuthForm = ({...props}) => {
   const dispatch = useDispatch();
   const [types, setTypes] = useState({
     type: 'Login', // 로그인 / 등록
@@ -122,13 +123,39 @@ const AuthForm = ({goWithoutLogin}) => {
     if (isFormValid) {
       //type = login
       if (types.type === 'Login') {
-        dispatch(signIn(submittedForm));
+        dispatch(signIn(submittedForm))
+          .then(response => {
+            props.goWithoutLogin();
+            setTokens(auth, () => {
+              setTypes({hasErrors: false});
+            });
+          })
+          .catch(error => console.log(error));
+        // setTokens(auth, () => {
+        //   setTypes({hasErrors: false});
+        //   props.goWithoutLogin();
+        // });
+        // // manageAccess();
         // type = register
       } else {
-        dispatch(signUp(submittedForm));
+        dispatch(signUp(submittedForm)).then(() => manageAccess());
       }
     } else {
       setTypes({hasErrors: true});
+    }
+  };
+
+  const auth = useSelector(state => state.User.auth);
+  console.log(auth?.userId, types.hasErrors);
+  // dispatch action 콜백 함수.
+  const manageAccess = () => {
+    if (!auth.userId) {
+      setTypes({hasErrors: true});
+    } else {
+      setTokens(auth, () => {
+        setTypes({hasErrors: false});
+        props.goWithoutLogin();
+      });
     }
   };
 
@@ -168,7 +195,7 @@ const AuthForm = ({goWithoutLogin}) => {
         <View style={styles.button}>
           <Button
             title={'비회원 로그인'}
-            onPress={goWithoutLogin}
+            onPress={props.goWithoutLogin}
             color="#48567f"
           />
         </View>
