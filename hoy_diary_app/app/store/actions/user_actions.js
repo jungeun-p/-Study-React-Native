@@ -1,6 +1,6 @@
-import {SIGN_IN, SIGN_UP} from '../types';
+import {SIGN_IN, SIGN_UP, AUTO_SIGN_IN} from '../types';
 import axios from 'axios';
-import {SIGNUP, SIGNIN} from '../../utils/misc';
+import {SIGNUP, SIGNIN, REFRESH} from '../../utils/misc';
 
 export const actions = {
   // signIn: data => ({
@@ -20,6 +20,28 @@ export const actions = {
 //     token: data.password,
 //   },
 // });
+
+export const autoSignIn = refToken => {
+  const request = axios({
+    method: 'POST',
+    url: REFRESH,
+    data: `grant_type=refresh_token&refresh_token=${refToken}`,
+    header: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  })
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => {
+      console.log(error);
+      return false;
+    });
+  return {
+    type: AUTO_SIGN_IN,
+    payload: request,
+  };
+};
 
 export function signIn(data) {
   const request = axios({

@@ -111,33 +111,26 @@ const AuthForm = ({goWithoutLogin}) => {
         submittedForm[key] = formCopy[key].value;
       }
     }
-
     if (isFormValid) {
       //type = login
       if (types.type === 'Login') {
-        dispatch(signIn(submittedForm))
-          .then(() => {
-            auth.userId && setTokens(auth, goWithoutLogin);
-          })
-          .catch(error => {
-            console.log(error);
-          });
+        dispatch(signIn(submittedForm));
       } else {
         dispatch(signUp(submittedForm));
       }
     } else {
-      setTypes({hasErrors: true});
+      setTypes({...types, hasErrors: true});
     }
   };
 
   const {auth} = useSelector(state => state.User);
-  //dispatch action 콜백 함수.
-
-  // const manageAccess = () => {
-  //   auth?.userId
-  //     ? setTokens(auth, goWithoutLogin)
-  //     : setTypes({hasErrors: true});
-  // };
+  useEffect(() => {
+    if (auth?.userId && !types.hasErrors) {
+      setTypes({...types, hasErrors: false});
+      setTokens(auth, goWithoutLogin);
+    } else {
+    }
+  }, [auth?.userId]);
 
   return (
     <View>
