@@ -1,21 +1,13 @@
-import React, {useState} from 'react';
-import {
-  Text,
-  View,
-  TextInput,
-  StyleSheet,
-  Button,
-  Platform,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Text, View, StyleSheet, Button, Platform} from 'react-native';
 import InputCommon from '../../utils/forms/input';
 import validationRules from '../../utils/forms/validationRules';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {signIn, signUp} from '../../store/actions/user_actions';
-import {bindActionCreators} from 'redux';
 import {setTokens} from '../../utils/misc';
 
-const AuthForm = ({...props}) => {
+const AuthForm = ({goWithoutLogin}) => {
   const dispatch = useDispatch();
   const [types, setTypes] = useState({
     type: 'Login', // 로그인 / 등록
@@ -124,40 +116,28 @@ const AuthForm = ({...props}) => {
       //type = login
       if (types.type === 'Login') {
         dispatch(signIn(submittedForm))
-          .then(response => {
-            props.goWithoutLogin();
-            setTokens(auth, () => {
-              setTypes({hasErrors: false});
-            });
+          .then(() => {
+            auth.userId && setTokens(auth, goWithoutLogin);
           })
-          .catch(error => console.log(error));
-        // setTokens(auth, () => {
-        //   setTypes({hasErrors: false});
-        //   props.goWithoutLogin();
-        // });
-        // // manageAccess();
-        // type = register
+          .catch(error => {
+            console.log(error);
+          });
       } else {
-        dispatch(signUp(submittedForm)).then(() => manageAccess());
+        dispatch(signUp(submittedForm));
       }
     } else {
       setTypes({hasErrors: true});
     }
   };
 
-  const auth = useSelector(state => state.User.auth);
-  console.log(auth?.userId, types.hasErrors);
-  // dispatch action 콜백 함수.
-  const manageAccess = () => {
-    if (!auth.userId) {
-      setTypes({hasErrors: true});
-    } else {
-      setTokens(auth, () => {
-        setTypes({hasErrors: false});
-        props.goWithoutLogin();
-      });
-    }
-  };
+  const {auth} = useSelector(state => state.User);
+  //dispatch action 콜백 함수.
+
+  // const manageAccess = () => {
+  //   auth?.userId
+  //     ? setTokens(auth, goWithoutLogin)
+  //     : setTypes({hasErrors: true});
+  // };
 
   return (
     <View>
@@ -195,7 +175,7 @@ const AuthForm = ({...props}) => {
         <View style={styles.button}>
           <Button
             title={'비회원 로그인'}
-            onPress={props.goWithoutLogin}
+            onPress={goWithoutLogin}
             color="#48567f"
           />
         </View>

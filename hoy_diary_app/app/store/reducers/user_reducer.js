@@ -1,6 +1,8 @@
 import {SIGN_IN, SIGN_UP} from '../types';
 
-export default function reducer(state = {}, action) {
+const INITIAL_STATE = {};
+
+export default function reducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case SIGN_IN:
       return {

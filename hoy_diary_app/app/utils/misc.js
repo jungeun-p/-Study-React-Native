@@ -11,7 +11,7 @@ export const setTokens = async (values, callBack) => {
   try {
     await AsyncStorage.multiSet([firstPair, secondPair, thirdPair]).then(
       response => {
-        console.log('setTokens 실행');
+        console.log('set Tokens 실행');
         callBack();
       },
     );
@@ -21,8 +21,8 @@ export const setTokens = async (values, callBack) => {
 
   console.log('Done.');
 };
-// callback 함수 호출 -> 문제 없음.
 
+// callback 함수 호출 -> 문제 없음.
 export const getTokens = async () => {
   let values;
   try {
