@@ -27,16 +27,20 @@ const AuthComponent = ({navigation}) => {
       '@hoydiary_app@token',
       '@hoydiary_app@refToken',
      */
+    // useEffect를 통해서 자동으로 asyncStorage의 토큰을 출력
     getTokens(value => {
-      // token값이 null이면 로그인 화면으로 처리
+      // token값이 null이라면 로그인 화면으로 처리
       if (value[1][1] === null) {
         setLoading(false);
       } else {
+        // 자동 로그인 action 전달
         dispatch(autoSignIn(value[2][1]))
           .then(() => {
+            // 현재 auth state에 토큰이 없다면
             if (!auth?.token) {
               setLoading(false);
             } else {
+              // token 갱신 후 자동으로 로그인 처리
               setTokens(auth, goWithoutLogin());
             }
           })

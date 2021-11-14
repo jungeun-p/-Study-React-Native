@@ -11,6 +11,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		60FA663C27412D91007BF30B /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 60FA663B27412D91007BF30B /* MaterialCommunityIcons.ttf */; };
 		7E10C6B216414CD348B334E7 /* libPods-hoy_diary_app-hoy_diary_appTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C82FA42C537E010AEEBABBBA /* libPods-hoy_diary_app-hoy_diary_appTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		BC3E2A298034893DFBC91034 /* libPods-hoy_diary_app.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CB0295654F9C7F1D5FD4E0 /* libPods-hoy_diary_app.a */; };
@@ -37,6 +38,7 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = hoy_diary_app/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = hoy_diary_app/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = hoy_diary_app/main.m; sourceTree = "<group>"; };
+		60FA663B27412D91007BF30B /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = hoy_diary_app/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9391BDE838BD66DD06D55F2B /* Pods-hoy_diary_app-hoy_diary_appTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoy_diary_app-hoy_diary_appTests.release.xcconfig"; path = "Target Support Files/Pods-hoy_diary_app-hoy_diary_appTests/Pods-hoy_diary_app-hoy_diary_appTests.release.xcconfig"; sourceTree = "<group>"; };
 		C82FA42C537E010AEEBABBBA /* libPods-hoy_diary_app-hoy_diary_appTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hoy_diary_app-hoy_diary_appTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,6 +88,7 @@
 		13B07FAE1A68108700A75B9A /* hoy_diary_app */ = {
 			isa = PBXGroup;
 			children = (
+				60FA663A27412CEB007BF30B /* Fonts */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -104,6 +107,14 @@
 				C82FA42C537E010AEEBABBBA /* libPods-hoy_diary_app-hoy_diary_appTests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		60FA663A27412CEB007BF30B /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				60FA663B27412D91007BF30B /* MaterialCommunityIcons.ttf */,
+			);
+			name = Fonts;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -145,7 +156,6 @@
 				EA7066D8ECE28CC4BCA5F721 /* Pods-hoy_diary_app-hoy_diary_appTests.debug.xcconfig */,
 				9391BDE838BD66DD06D55F2B /* Pods-hoy_diary_app-hoy_diary_appTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -245,6 +255,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				60FA663C27412D91007BF30B /* MaterialCommunityIcons.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
