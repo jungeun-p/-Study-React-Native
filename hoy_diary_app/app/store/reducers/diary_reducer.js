@@ -5,7 +5,7 @@ export default function (state = {}, action) {
     case GET_DIARIES:
       return {
         ...state,
-        //other
+        documents: action.payload ?? false,
       };
     default:
       return state;
