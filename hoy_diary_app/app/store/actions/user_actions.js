@@ -2,25 +2,6 @@ import {SIGN_IN, SIGN_UP, AUTO_SIGN_IN} from '../types';
 import axios from 'axios';
 import {SIGNUP, SIGNIN, REFRESH} from '../../utils/misc';
 
-export const actions = {
-  // signIn: data => ({
-  //   type: SIGN_IN,
-  //   payload: {email: data.email, token: data.password},
-  // }),
-  // signUp: submittedForm => ({
-  //   type: SIGN_UP,
-  //   payload: {email: submittedForm.email, token: submittedForm.password},
-  // }),
-};
-
-// export const signIn = data => ({
-//   type: SIGN_IN,
-//   payload: {
-//     email: data.email,
-//     token: data.password,
-//   },
-// });
-
 export const autoSignIn = refToken => {
   const request = axios({
     method: 'POST',
