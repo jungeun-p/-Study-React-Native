@@ -21,7 +21,10 @@ const firebaseConfig = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
-export const storage = getStorage(firebaseApp);
+export const storage = getStorage(
+  firebaseApp,
+  'gs://hoy-diary-app.appspot.com/',
+);
 export const database = getDatabase(firebaseApp);
 
 // export const storage = firebase.storage();

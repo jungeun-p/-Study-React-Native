@@ -1,6 +1,8 @@
+import {getDownloadURL, ref} from 'firebase/storage';
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Image} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
+import {storage} from '../../utils/misc';
 
 const DiaryDocu = ({...props}) => {
   const [diary, setDiary] = useState({
@@ -13,9 +15,36 @@ const DiaryDocu = ({...props}) => {
       imagePath: null,
       title: null,
     },
+    image: null,
   });
   // 화면에서 넘겨준 parameter = params.newDiary
   const params = props.route.params;
+  const getImage = () => {
+    getDownloadURL(
+      ref(storage, `diaryImage/index${diary.diaryData.id}/image.jpg`),
+    )
+      .then(url => {
+        console.log(url);
+        setDiary({...diary, image: url});
+      })
+      .catch(error => console.log(error));
+    // getDownloadURL(storageRef)
+    //   .then(res => {
+    //     console.log(res);
+    //     setDiary({...diary, image: res});
+    //   })
+    //   .catch(error => console.log(error));
+    // storage
+    //   .ref('diaryImage')
+    //   .child(`index${diary.diaryData.id}/image.jpg`)
+    //   .getDownloadURL()
+    //   .then(url => setDiary({...diary, image: url}));
+    // getDownloadURL(ref(storage, `index${cdiary.diaryData.id}/image.jpg`)).then(
+    //   url => {
+    //     setDiary({...diary, image: url});
+    //   },
+    // );
+  };
   useEffect(() => {
     if (!params.newDiary) {
       setDiary({
@@ -32,7 +61,9 @@ const DiaryDocu = ({...props}) => {
         diaryData: {id: params.id},
       });
     }
-    console.log(diary);
+    // newDiary false && imagePath true
+    !params.newDiary && params.diaryData.data.imagePath ? getImage() : null;
+    console.log(diary.image);
   }, [diary.newDiary]);
 
   const onChangeInput = (item, value) => {
@@ -133,8 +164,19 @@ const DiaryDocu = ({...props}) => {
           </ScrollView>
         </View>
       </View>
-      <View style={{flex: 4, borderBottomWidth: 0.5}}>
-        <Text>Image</Text>
+      <View style={styles.imageView}>
+        <View style={{flex: 10, paddingRight: 15}}>
+          <Text style={styles.dateText}>Image </Text>
+          <View style={[styles.dateInputView, styles.imageDisplayView]}>
+            {diary.diaryData.imagePath ? (
+              <Image
+                source={{uri: diary.image}}
+                style={{height: '100%', width: '100%'}}
+              />
+            ) : null}
+          </View>
+        </View>
+        <View style={{flex: 1, pddingTop: 30, paddingRight: 10}}></View>
       </View>
       <View style={{flex: 1.5, borderBottomWidth: 0.5}}>
         <Text>Button</Text>
@@ -182,6 +224,16 @@ const styles = StyleSheet.create({
   },
   descriptionInputView: {
     flex: 0.95,
+    marginTop: 5,
+  },
+  imageView: {
+    flex: 4,
+    paddiingLeft: 15,
+    paddingRight: 15,
+    flexDirection: 'row',
+  },
+  imageDisplayView: {
+    flex: 0.9,
     marginTop: 5,
   },
 });
