@@ -193,6 +193,7 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				DBCFE24003BC99F5B3983988 /* [CP-User] [RNFB] Core Configuration */,
+				7FF60ED81F14E4D9D51CEBC1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -311,6 +312,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-hoy_diary_app-hoy_diary_appTests/Pods-hoy_diary_app-hoy_diary_appTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7FF60ED81F14E4D9D51CEBC1 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-hoy_diary_app/Pods-hoy_diary_app-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-hoy_diary_app/Pods-hoy_diary_app-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-hoy_diary_app/Pods-hoy_diary_app-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A64F45661260CEB5A9152790 /* [CP] Check Pods Manifest.lock */ = {

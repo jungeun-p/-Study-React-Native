@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {initializeApp} from 'firebase/app';
-import {getStorage} from 'firebase/storage';
+import {getStorage, ref} from 'firebase/storage';
 import {getDatabase} from 'firebase/database';
 
 export const APIKEY = 'AIzaSyBd9ijY9CmTNYee_YpoMYtqQRH7FOD6rVc';
@@ -20,12 +20,11 @@ const firebaseConfig = {
   appId: '1:792594232030:web:16e80695c19b89ffa3884f',
 };
 
-const firebaseApp = initializeApp(firebaseConfig);
-export const storage = getStorage(
-  firebaseApp,
-  'gs://hoy-diary-app.appspot.com/',
-);
-export const database = getDatabase(firebaseApp);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+export const storage = getStorage(app);
+// export const database = getDatabase(firebaseApp);
 
 // export const storage = firebase.storage();
 // export const database = firebase.database();

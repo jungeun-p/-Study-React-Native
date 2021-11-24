@@ -20,30 +20,12 @@ const DiaryDocu = ({...props}) => {
   // 화면에서 넘겨준 parameter = params.newDiary
   const params = props.route.params;
   const getImage = () => {
-    getDownloadURL(
-      ref(storage, `diaryImage/index${diary.diaryData.id}/image.jpg`),
-    )
+    getDownloadURL(ref(storage, `diaryImage/index${diary.diaryData.id}.jpg`))
       .then(url => {
         console.log(url);
         setDiary({...diary, image: url});
       })
       .catch(error => console.log(error));
-    // getDownloadURL(storageRef)
-    //   .then(res => {
-    //     console.log(res);
-    //     setDiary({...diary, image: res});
-    //   })
-    //   .catch(error => console.log(error));
-    // storage
-    //   .ref('diaryImage')
-    //   .child(`index${diary.diaryData.id}/image.jpg`)
-    //   .getDownloadURL()
-    //   .then(url => setDiary({...diary, image: url}));
-    // getDownloadURL(ref(storage, `index${cdiary.diaryData.id}/image.jpg`)).then(
-    //   url => {
-    //     setDiary({...diary, image: url});
-    //   },
-    // );
   };
   useEffect(() => {
     if (!params.newDiary) {
