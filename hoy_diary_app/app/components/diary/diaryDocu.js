@@ -1,7 +1,8 @@
 import {getDownloadURL, ref} from 'firebase/storage';
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, ScrollView, Image} from 'react-native';
-import {TextInput} from 'react-native-gesture-handler';
+import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
+import {launchImageLibrary} from 'react-native-image-picker';
 import {storage} from '../../utils/misc';
 
 const DiaryDocu = ({...props}) => {
@@ -19,14 +20,34 @@ const DiaryDocu = ({...props}) => {
   });
   // 화면에서 넘겨준 parameter = params.newDiary
   const params = props.route.params;
+
   const getImage = () => {
     getDownloadURL(ref(storage, `diaryImage/index${diary.diaryData.id}.jpg`))
       .then(url => {
-        console.log(url);
         setDiary({...diary, image: url});
       })
       .catch(error => console.log(error));
   };
+
+  const selectImage = () => {
+    let imageDir = `diaryImage/index${diary.diaryData.id}`;
+    launchImageLibrary(
+      {
+        noData: true,
+      },
+      response => {
+        setDiary({
+          ...diary,
+          image: response.assets[0].uri,
+          diaryData: {imagePath: imageDir},
+        });
+      },
+    ).catch(error => {
+      console.log(error);
+    });
+    // image path => imageDir로 업데이트 .
+  };
+
   useEffect(() => {
     if (!params.newDiary) {
       setDiary({
@@ -45,7 +66,6 @@ const DiaryDocu = ({...props}) => {
     }
     // newDiary false && imagePath true
     !params.newDiary && params.diaryData.data.imagePath ? getImage() : null;
-    console.log(diary.image);
   }, [diary.newDiary]);
 
   const onChangeInput = (item, value) => {
@@ -63,13 +83,36 @@ const DiaryDocu = ({...props}) => {
       <View style={styles.indexView}>
         <Text style={styles.indexText}>#{diary.index + 1}</Text>
       </View>
+      {/** Image View */}
+      <View style={styles.imageView}>
+        <View style={{flex: 10, marginTop: 15}}>
+          <View style={[styles.imageDisplayView]}>
+            {diary.diaryData.imagePath ? (
+              <Image
+                source={{uri: diary.image}}
+                style={{height: '100%', width: '100%', resizeMode: 'cover'}}
+              />
+            ) : null}
+          </View>
+        </View>
+      </View>
+      <View style={{flex: 1}}>
+        {diary.newDiary ? (
+          <TouchableOpacity onPress={() => selectImage()}>
+            <Text style={{fontSize: 14}}>📸</Text>
+          </TouchableOpacity>
+        ) : (
+          <Text style={{fontSize: 14, opacity: 0.2}}>📸</Text>
+        )}
+      </View>
+      {/** date View */}
       <View style={styles.dateView}>
         <Text style={styles.dateText}>Date</Text>
         <View style={styles.dateInputView}>
           {diary.newDiary ? (
             <TextInput
               value={diary.diaryData.date}
-              style={{fontSize: 20, paddingTop: 0, paddingBottom: 0}}
+              style={{fontSize: 14, paddingTop: 0, paddingBottom: 0}}
               placeholder="date"
               placeholderTextColor="#777"
               onChangeText={value => onChangeInput('date', value)}
@@ -79,7 +122,7 @@ const DiaryDocu = ({...props}) => {
             <TextInput
               value={diary.diaryData.date}
               style={{
-                fontSize: 20,
+                fontSize: 14,
                 paddingTop: 0,
                 paddingBottom: 0,
                 color: 'gray',
@@ -95,7 +138,7 @@ const DiaryDocu = ({...props}) => {
           {diary.newDiary ? (
             <TextInput
               value={diary.diaryData.title}
-              style={{fontSize: 20, paddingTop: 0, paddingBottom: 0}}
+              style={{fontSize: 14, paddingTop: 0, paddingBottom: 0}}
               placeholder="title"
               placeholderTextColor="#777"
               onChangeText={value => onChangeInput('title', value)}
@@ -105,7 +148,7 @@ const DiaryDocu = ({...props}) => {
             <TextInput
               value={diary.diaryData.title}
               style={{
-                fontSize: 20,
+                fontSize: 14,
                 paddingTop: 0,
                 paddingBottom: 0,
                 color: 'gray',
@@ -116,13 +159,12 @@ const DiaryDocu = ({...props}) => {
         </View>
       </View>
       <View style={styles.descriptionView}>
-        <Text style={styles.dateText}>Description</Text>
-        <View style={[styles.dateInputView, styles.descriptionInputView]}>
+        <View style={[styles.descriptionInputView]}>
           <ScrollView>
             {diary.newDiary ? (
               <TextInput
                 value={diary.diaryData.description}
-                style={{fontSize: 20, paddingTop: 0, paddingBottom: 0}}
+                style={{fontSize: 14, paddingTop: 0, paddingBottom: 0}}
                 placeholder="description"
                 placeholderTextColor="#777"
                 onChangeText={value => onChangeInput('description', value)}
@@ -133,7 +175,7 @@ const DiaryDocu = ({...props}) => {
               <TextInput
                 value={diary.diaryData.description}
                 style={{
-                  fontSize: 20,
+                  fontSize: 14,
                   paddingTop: 0,
                   paddingBottom: 0,
                   color: 'gray',
@@ -145,20 +187,6 @@ const DiaryDocu = ({...props}) => {
             )}
           </ScrollView>
         </View>
-      </View>
-      <View style={styles.imageView}>
-        <View style={{flex: 10, paddingRight: 15}}>
-          <Text style={styles.dateText}>Image </Text>
-          <View style={[styles.dateInputView, styles.imageDisplayView]}>
-            {diary.diaryData.imagePath ? (
-              <Image
-                source={{uri: diary.image}}
-                style={{height: '100%', width: '100%'}}
-              />
-            ) : null}
-          </View>
-        </View>
-        <View style={{flex: 1, pddingTop: 30, paddingRight: 10}}></View>
       </View>
       <View style={{flex: 1.5, borderBottomWidth: 0.5}}>
         <Text>Button</Text>
@@ -175,8 +203,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   indexView: {
-    flex: 1,
-    paddingLeft: 10,
+    flex: 0.5,
     marginTop: 10,
   },
   indexText: {
@@ -189,34 +216,32 @@ const styles = StyleSheet.create({
     alignItems: 'baseline',
   },
   dateText: {
-    fontSize: 21,
+    fontSize: 14,
     fontWeight: 'bold',
   },
   dateInputView: {
     flex: 1,
-    paddingLeft: 15,
-    paddingRight: 15,
-    paddingTop: 3,
-    paddingBottom: 3,
-    borderWidth: 1,
-    borderRadius: 1,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderBottomWidth: 1.4,
   },
   descriptionView: {
-    flex: 7,
+    flex: 3,
+    marginTop: 10,
   },
   descriptionInputView: {
     flex: 0.95,
     marginTop: 5,
   },
   imageView: {
-    flex: 4,
-    paddiingLeft: 15,
-    paddingRight: 15,
-    flexDirection: 'row',
+    flex: 7,
+    // paddingTop: 4,
   },
   imageDisplayView: {
     flex: 0.9,
-    marginTop: 5,
+    // marginTop: 10,
   },
 });
 
