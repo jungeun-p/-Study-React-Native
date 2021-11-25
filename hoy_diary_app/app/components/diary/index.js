@@ -28,7 +28,7 @@ const DiaryComponent = ({navigation}) => {
           <TouchableOpacity
             key={index}
             onPress={() => {
-              navigation.navigate('DiaryDocu', {
+              navigation.push('DiaryDocu', {
                 newDiary: false,
                 diaryData: item,
                 index: index,
@@ -116,7 +116,7 @@ const DiaryComponent = ({navigation}) => {
           borderRadius: 50,
         }}
         onPress={() => {
-          navigation.navigate('DiaryDocu', {
+          navigation.push('DiaryDocu', {
             newDiary: true,
             // index: 변경 가능
             index: Diaries.documents.length,

@@ -90,6 +90,8 @@ const AppTabComponent = () => {
         tabBarStyle: {
           backgroundColor: 'black',
         },
+        // Android에서 keyboard 설정시 TabBar를 숨겨준다.
+        tabBarHideOnKeyboard: true,
       })}>
       <MainScreenTab.Screen name="Diarys" component={DiaryStackComponent} />
       <MainScreenTab.Screen name="News" component={NewsStackComponent} />

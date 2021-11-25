@@ -1,13 +1,25 @@
-import {getDownloadURL, ref} from 'firebase/storage';
+import {set, ref as dbRef} from 'firebase/database';
+import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {storage} from '../../utils/misc';
+import {database, storage} from '../../utils/misc';
 
 const DiaryDocu = ({...props}) => {
   const [diary, setDiary] = useState({
     newDiary: null,
+    isLoading: false,
     index: null,
     diaryData: {
       date: null,
@@ -20,7 +32,9 @@ const DiaryDocu = ({...props}) => {
   });
   // 화면에서 넘겨준 parameter = params.newDiary
   const params = props.route.params;
+  console.log(diary.diaryData);
 
+  // 이미지 가져오기
   const getImage = () => {
     getDownloadURL(ref(storage, `diaryImage/index${diary.diaryData.id}.jpg`))
       .then(url => {
@@ -29,6 +43,7 @@ const DiaryDocu = ({...props}) => {
       .catch(error => console.log(error));
   };
 
+  // 이미지 선택
   const selectImage = () => {
     let imageDir = `diaryImage/index${diary.diaryData.id}`;
     launchImageLibrary(
@@ -39,13 +54,60 @@ const DiaryDocu = ({...props}) => {
         setDiary({
           ...diary,
           image: response.assets[0].uri,
-          diaryData: {imagePath: imageDir},
+          diaryData: {...diary.diaryData, imagePath: imageDir},
         });
       },
     ).catch(error => {
       console.log(error);
     });
     // image path => imageDir로 업데이트 .
+  };
+
+  const deleteData = () => {};
+  const updateData = () => {};
+
+  const uploadData = async () => {
+    setDiary({...diary, isLoading: true});
+    const data = diary.diaryData;
+    const id = data.id;
+    // firebase 객체의 이름과 맞춰서 data
+    const dataBaseDirectory = `diary/${id}`;
+    const storageDirectory = `diaryImage/index${id}.jpg`;
+    try {
+      // dataBase를 사용
+      await set(dbRef(database, dataBaseDirectory), {data});
+      // upload 완료시 image upload 함수 실행
+      uploadImage(storageDirectory);
+    } catch (e) {
+      setDiary({...diary, isLoading: false});
+      alert('저장 실패' + e);
+    }
+  };
+
+  const uploadImage = async imageDirectory => {
+    if (diary.image) {
+      // fetch : promise 타입의 객체를 반환.
+      // await을 적용해서 response로 받아낸다.
+      const response = await fetch(diary.image);
+      // image나 영상을 담아 형식을 변형.
+      const blob = await response.blob();
+      try {
+        // image 디렉토리 전달.
+        // put을 통해서 이미지 전달.
+        await uploadBytes(ref(storage, imageDirectory), blob).then(() => {
+          setDiary({...diary, isLoading: false});
+          props.navigation.push('Diary');
+        });
+      } catch (e) {
+        setDiary({isLoading: false});
+        alert('저장 실패' + e.message);
+      }
+    } else {
+      setDiary({isLoading: false});
+      // push : 컴포넌트가 새로 마운트
+      // navigate : 이전 화면이 stack에 쌓임.
+      props.navigation.push('/Diary');
+    }
   };
 
   useEffect(() => {
@@ -79,119 +141,158 @@ const DiaryDocu = ({...props}) => {
   };
 
   return (
-    <View style={styles.diaryContainer}>
-      <View style={styles.indexView}>
-        <Text style={styles.indexText}>#{diary.index + 1}</Text>
-      </View>
-      {/** Image View */}
-      <View style={styles.imageView}>
-        <View style={{flex: 10, marginTop: 15}}>
-          <View style={[styles.imageDisplayView]}>
-            {diary.diaryData.imagePath ? (
-              <Image
-                source={{uri: diary.image}}
-                style={{height: '100%', width: '100%', resizeMode: 'cover'}}
-              />
-            ) : null}
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      // positon, padding, height 제공
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      enabled={true}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.diaryContainer}>
+          <View style={styles.indexView}>
+            <Text style={styles.indexText}>#{diary.index + 1}</Text>
+          </View>
+          {/** Image View */}
+          <View style={styles.imageView}>
+            <View style={{flex: 10, marginTop: 15}}>
+              <View style={[styles.imageDisplayView]}>
+                {diary.diaryData.imagePath ? (
+                  <Image
+                    source={{uri: diary.image}}
+                    style={{height: '100%', width: '100%', resizeMode: 'cover'}}
+                  />
+                ) : null}
+              </View>
+            </View>
+          </View>
+          <View style={{flex: 1}}>
+            {diary.newDiary ? (
+              <TouchableOpacity onPress={() => selectImage()}>
+                <Text style={{fontSize: 14}}>📸</Text>
+              </TouchableOpacity>
+            ) : (
+              <Text style={{fontSize: 14, opacity: 0.2}}>📸</Text>
+            )}
+          </View>
+          {/** date View */}
+          <View style={styles.dateView}>
+            <Text style={styles.dateText}>Date</Text>
+            <View style={styles.dateInputView}>
+              {diary.newDiary ? (
+                <TextInput
+                  value={diary.diaryData.date}
+                  style={{fontSize: 14, paddingTop: 0, paddingBottom: 0}}
+                  placeholder="date"
+                  placeholderTextColor="#777"
+                  onChangeText={value => onChangeInput('date', value)}
+                  editable={true}
+                />
+              ) : (
+                <TextInput
+                  value={diary.diaryData.date}
+                  style={{
+                    fontSize: 14,
+                    paddingTop: 0,
+                    paddingBottom: 0,
+                    color: 'gray',
+                  }}
+                  editable={false}
+                />
+              )}
+            </View>
+          </View>
+          <View style={styles.dateView}>
+            <Text style={styles.dateText}>Title</Text>
+            <View style={styles.dateInputView}>
+              {diary.newDiary ? (
+                <TextInput
+                  value={diary.diaryData.title}
+                  style={{fontSize: 14, paddingTop: 0, paddingBottom: 0}}
+                  placeholder="title"
+                  placeholderTextColor="#777"
+                  onChangeText={value => onChangeInput('title', value)}
+                  editable={true}
+                />
+              ) : (
+                <TextInput
+                  value={diary.diaryData.title}
+                  style={{
+                    fontSize: 14,
+                    paddingTop: 0,
+                    paddingBottom: 0,
+                    color: 'gray',
+                  }}
+                  editable={false}
+                />
+              )}
+            </View>
+          </View>
+          <View style={styles.descriptionView}>
+            <View style={[styles.descriptionInputView]}>
+              <ScrollView>
+                {diary.newDiary ? (
+                  <TextInput
+                    value={diary.diaryData.description}
+                    style={{fontSize: 14, paddingTop: 0, paddingBottom: 0}}
+                    placeholder="description"
+                    placeholderTextColor="#777"
+                    onChangeText={value => onChangeInput('description', value)}
+                    editable={true}
+                    multiline={true}
+                  />
+                ) : (
+                  <TextInput
+                    value={diary.diaryData.description}
+                    style={{
+                      fontSize: 14,
+                      paddingTop: 0,
+                      paddingBottom: 0,
+                      color: 'gray',
+                    }}
+                    placeholder="description"
+                    editable={false}
+                    multiline={true}
+                  />
+                )}
+              </ScrollView>
+            </View>
+          </View>
+          <View style={styles.buttonView}>
+            {!diary.newDiary ? (
+              <>
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity
+                    style={{fontSize: 15, padding: 5}}
+                    onPress={deleteData}>
+                    <Text style={{color: 'white', fontWeight: 'bold'}}>
+                      Delete
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity
+                    style={{fontSize: 15, padding: 5}}
+                    onPress={updateData}>
+                    <Text style={{color: 'white', fontWeight: 'bold'}}>
+                      Update
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            ) : (
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={{fontSize: 15, padding: 5}}
+                  onPress={uploadData}>
+                  <Text style={{color: 'white', fontWeight: 'bold'}}>
+                    Upload
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
         </View>
-      </View>
-      <View style={{flex: 1}}>
-        {diary.newDiary ? (
-          <TouchableOpacity onPress={() => selectImage()}>
-            <Text style={{fontSize: 14}}>📸</Text>
-          </TouchableOpacity>
-        ) : (
-          <Text style={{fontSize: 14, opacity: 0.2}}>📸</Text>
-        )}
-      </View>
-      {/** date View */}
-      <View style={styles.dateView}>
-        <Text style={styles.dateText}>Date</Text>
-        <View style={styles.dateInputView}>
-          {diary.newDiary ? (
-            <TextInput
-              value={diary.diaryData.date}
-              style={{fontSize: 14, paddingTop: 0, paddingBottom: 0}}
-              placeholder="date"
-              placeholderTextColor="#777"
-              onChangeText={value => onChangeInput('date', value)}
-              editable={true}
-            />
-          ) : (
-            <TextInput
-              value={diary.diaryData.date}
-              style={{
-                fontSize: 14,
-                paddingTop: 0,
-                paddingBottom: 0,
-                color: 'gray',
-              }}
-              editable={false}
-            />
-          )}
-        </View>
-      </View>
-      <View style={styles.dateView}>
-        <Text style={styles.dateText}>Title</Text>
-        <View style={styles.dateInputView}>
-          {diary.newDiary ? (
-            <TextInput
-              value={diary.diaryData.title}
-              style={{fontSize: 14, paddingTop: 0, paddingBottom: 0}}
-              placeholder="title"
-              placeholderTextColor="#777"
-              onChangeText={value => onChangeInput('title', value)}
-              editable={true}
-            />
-          ) : (
-            <TextInput
-              value={diary.diaryData.title}
-              style={{
-                fontSize: 14,
-                paddingTop: 0,
-                paddingBottom: 0,
-                color: 'gray',
-              }}
-              editable={false}
-            />
-          )}
-        </View>
-      </View>
-      <View style={styles.descriptionView}>
-        <View style={[styles.descriptionInputView]}>
-          <ScrollView>
-            {diary.newDiary ? (
-              <TextInput
-                value={diary.diaryData.description}
-                style={{fontSize: 14, paddingTop: 0, paddingBottom: 0}}
-                placeholder="description"
-                placeholderTextColor="#777"
-                onChangeText={value => onChangeInput('description', value)}
-                editable={true}
-                multiline={true}
-              />
-            ) : (
-              <TextInput
-                value={diary.diaryData.description}
-                style={{
-                  fontSize: 14,
-                  paddingTop: 0,
-                  paddingBottom: 0,
-                  color: 'gray',
-                }}
-                placeholder="description"
-                editable={false}
-                multiline={true}
-              />
-            )}
-          </ScrollView>
-        </View>
-      </View>
-      <View style={{flex: 1.5, borderBottomWidth: 0.5}}>
-        <Text>Button</Text>
-      </View>
-    </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -211,7 +312,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   dateView: {
-    flex: 1,
+    // flex: 1,
+    height: 40,
     flexDirection: 'row',
     alignItems: 'baseline',
   },
@@ -242,6 +344,22 @@ const styles = StyleSheet.create({
   imageDisplayView: {
     flex: 0.9,
     // marginTop: 10,
+  },
+  buttonView: {
+    flex: 1.5,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  buttonContainer: {
+    width: 90,
+    height: 40,
+    marginLeft: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'black',
+    borderRadius: 12,
+    fontWeight: 'bold',
   },
 });
 
