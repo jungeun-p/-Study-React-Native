@@ -1,5 +1,5 @@
 import {set, ref as dbRef} from 'firebase/database';
-import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
+import {deleteObject, getDownloadURL, ref, uploadBytes} from 'firebase/storage';
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {launchImageLibrary} from 'react-native-image-picker';
+import Spinner from 'react-native-loading-spinner-overlay';
 import {database, storage} from '../../utils/misc';
 
 const DiaryDocu = ({...props}) => {
@@ -32,7 +33,7 @@ const DiaryDocu = ({...props}) => {
   });
   // 화면에서 넘겨준 parameter = params.newDiary
   const params = props.route.params;
-  console.log(diary.diaryData);
+  console.log(params.newDiary);
 
   // 이미지 가져오기
   const getImage = () => {
@@ -63,8 +64,29 @@ const DiaryDocu = ({...props}) => {
     // image path => imageDir로 업데이트 .
   };
 
-  const deleteData = () => {};
-  const updateData = () => {};
+  const updateData = () => {
+    setDiary({...diary, newDiary: true});
+  };
+  const deleteData = async () => {
+    const id = diary.diaryData.id;
+    const databaseDirectory = `diary/${id}`;
+    const storageDirectory = `diaryImage/index${id}.jpg`;
+    const databaseRef = dbRef(database, databaseDirectory);
+    const storageRef = ref(storage, storageDirectory);
+
+    try {
+      await set(databaseRef, null);
+      await deleteObject(storageRef)
+        .then(() => {
+          props.navigation.push('Diary');
+        })
+        .catch(() => {
+          props.navigation.push('Diary');
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const uploadData = async () => {
     setDiary({...diary, isLoading: true});
@@ -128,7 +150,7 @@ const DiaryDocu = ({...props}) => {
     }
     // newDiary false && imagePath true
     !params.newDiary && params.diaryData.data.imagePath ? getImage() : null;
-  }, [diary.newDiary]);
+  }, [diary.diaryData.id]);
 
   const onChangeInput = (item, value) => {
     if (item === 'date') {
@@ -257,39 +279,39 @@ const DiaryDocu = ({...props}) => {
             </View>
           </View>
           <View style={styles.buttonView}>
-            {!diary.newDiary ? (
-              <>
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity
-                    style={{fontSize: 15, padding: 5}}
-                    onPress={deleteData}>
-                    <Text style={{color: 'white', fontWeight: 'bold'}}>
-                      Delete
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity
-                    style={{fontSize: 15, padding: 5}}
-                    onPress={updateData}>
-                    <Text style={{color: 'white', fontWeight: 'bold'}}>
-                      Update
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </>
-            ) : (
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={{fontSize: 15, padding: 5}}
-                  onPress={uploadData}>
-                  <Text style={{color: 'white', fontWeight: 'bold'}}>
-                    Upload
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
+            {/* {!diary.newDiary ? ( */}
+            {/* <> */}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={{fontSize: 15, padding: 5}}
+                onPress={deleteData}>
+                <Text style={{color: 'white', fontWeight: 'bold'}}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={{fontSize: 15, padding: 5}}
+                onPress={updateData}>
+                <Text style={{color: 'white', fontWeight: 'bold'}}>Update</Text>
+              </TouchableOpacity>
+            </View>
+            {/* </>
+            ) : ( */}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={{fontSize: 15, padding: 5}}
+                onPress={uploadData}>
+                <Text style={{color: 'white', fontWeight: 'bold'}}>Upload</Text>
+              </TouchableOpacity>
+            </View>
+            {/* )} */}
           </View>
+          <Spinner
+            visible={diary.isLoading}
+            textContent={'Loading...'}
+            overlayColor={'rgba(0,0,0,0,0.6)'}
+            textStyle={{color: '#fff'}}
+          />
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

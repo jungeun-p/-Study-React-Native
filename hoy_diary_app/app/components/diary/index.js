@@ -76,7 +76,7 @@ const DiaryComponent = ({navigation}) => {
                   </View>
                 ) : null}
                 {item.data.description ? (
-                  <View style={{paddingTop: 10}}>
+                  <View style={{paddingLeft: 4, paddingTop: 10}}>
                     <Text style={{fontSize: 16, color: 'white'}}>
                       {item.data.description}
                     </Text>
@@ -104,7 +104,9 @@ const DiaryComponent = ({navigation}) => {
   return (
     <View>
       <ScrollView style={{backgroundColor: 'white'}}>
-        {renderDiary(Diaries)}
+        <View style={{flexDirection: 'column-reverse'}}>
+          {renderDiary(Diaries)}
+        </View>
       </ScrollView>
       <TouchableOpacity
         style={{
