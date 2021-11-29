@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {initializeApp} from 'firebase/app';
-import {getStorage, ref} from 'firebase/storage';
+import {getStorage} from 'firebase/storage';
 import {getDatabase} from 'firebase/database';
+import {getAuth} from 'firebase/auth';
 
 export const APIKEY = 'AIzaSyBd9ijY9CmTNYee_YpoMYtqQRH7FOD6rVc';
 export const SIGNUP = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${APIKEY}`;
@@ -25,9 +26,7 @@ const app = initializeApp(firebaseConfig);
 
 export const storage = getStorage(app);
 export const database = getDatabase(app);
-
-// export const storage = firebase.storage();
-// export const database = firebase.database();
+export const auth = getAuth(app);
 
 export const setTokens = async (values, callBack) => {
   const firstPair = ['@hoydiary_app@userId', values.userId];

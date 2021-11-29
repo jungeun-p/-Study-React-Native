@@ -42,7 +42,6 @@ const AuthForm = ({goWithoutLogin}) => {
       },
     },
   });
-
   // onchange
   const updateInput = (name, value) => {
     let formCopy = types.form;
@@ -114,6 +113,7 @@ const AuthForm = ({goWithoutLogin}) => {
     if (isFormValid) {
       //type = login
       if (types.type === 'Login') {
+        console.log(submittedForm);
         dispatch(signIn(submittedForm));
       } else {
         dispatch(signUp(submittedForm));
@@ -124,6 +124,7 @@ const AuthForm = ({goWithoutLogin}) => {
   };
 
   const {auth} = useSelector(state => state.User);
+
   useEffect(() => {
     if (auth?.userId && !types.hasErrors) {
       setTypes({...types, hasErrors: false});

@@ -1,6 +1,7 @@
 import {SIGN_IN, SIGN_UP, AUTO_SIGN_IN} from '../types';
 import axios from 'axios';
-import {SIGNUP, SIGNIN, REFRESH} from '../../utils/misc';
+import {SIGNUP, SIGNIN, REFRESH, auth} from '../../utils/misc';
+import {signInWithEmailAndPassword} from '@firebase/auth';
 
 export const autoSignIn = refToken => {
   const request = axios({
@@ -24,13 +25,38 @@ export const autoSignIn = refToken => {
   };
 };
 
+// const firebaseLogin = async (email, password) => {
+//   try {
+//     await signInWithEmailAndPassword(auth, email, password).then(
+//       userCredential => {
+//         let user = userCredential.user;
+//         return user;
+//       },
+//       console.log(user),
+//     );
+//   } catch (e) {
+//     console.warn(e.message);
+//   }
+// };
+const firebaseLogin = data => {
+  signInWithEmailAndPassword(auth, data.email, data.password)
+    .then(userCredential => {
+      console.log(userCredential.user);
+      return userCredential.user;
+    })
+    .catch(error => {
+      console.log(error.message);
+    });
+};
+
 export function signIn(data) {
+  firebaseLogin(data);
   const request = axios({
     method: 'POST',
     url: SIGNIN,
     data: {
       email: data.email,
-      password: data.email,
+      password: data.password,
       returnSecureToken: true,
     },
     header: {
@@ -56,7 +82,7 @@ export function signUp(data) {
     url: SIGNUP,
     data: {
       email: data.email,
-      password: data.email,
+      password: data.password,
       returnSecureToken: true,
     },
     header: {
