@@ -30,14 +30,19 @@ const DiaryDocu = ({...props}) => {
       title: null,
     },
     image: null,
+    userId: null,
   });
   // 화면에서 넘겨준 parameter = params.newDiary
   const params = props.route.params;
-  console.log(params.newDiary);
 
   // 이미지 가져오기
   const getImage = () => {
-    getDownloadURL(ref(storage, `diaryImage/index${diary.diaryData.id}.jpg`))
+    getDownloadURL(
+      ref(
+        storage,
+        `diaryImage/${diary.userId}/${diary.diaryData.imagePath}/image.jpg`,
+      ),
+    )
       .then(url => {
         setDiary({...diary, image: url});
       })
@@ -139,6 +144,7 @@ const DiaryDocu = ({...props}) => {
         newDiary: params.newDiary,
         index: params.index,
         diaryData: params.diaryData.data,
+        userId: params.userId,
       });
     } else {
       setDiary({
@@ -146,6 +152,7 @@ const DiaryDocu = ({...props}) => {
         newDiary: true,
         index: params.index,
         diaryData: {id: params.id},
+        userId: params.userId,
       });
     }
     // newDiary false && imagePath true

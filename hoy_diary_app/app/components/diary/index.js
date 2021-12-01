@@ -42,10 +42,11 @@ const DiaryComponent = ({navigation}) => {
               manageState(false);
             } else {
               // token 갱신 후 자동으로 로그인 처리
-              setTokens(User.auth, () => {
-                manageState(true);
-                dispatch(getDiaries(User));
-              });
+              setTokens(
+                User.auth,
+                manageState(true),
+                dispatch(getDiaries(User)),
+              );
             }
           })
           .catch(error => console.log(error));
@@ -54,7 +55,7 @@ const DiaryComponent = ({navigation}) => {
   }, []);
 
   // jsx 반환
-  const renderDiary = Diaries =>
+  const renderDiary = (Diaries, User) =>
     Diaries.documents
       ? Diaries.documents.map((item, index) => (
           <TouchableOpacity
@@ -65,6 +66,7 @@ const DiaryComponent = ({navigation}) => {
                 diaryData: item,
                 index: index,
                 id: item.data.id,
+                userId: User.auth.userId,
               });
             }}>
             <View style={styles.diaryContainer}>
@@ -138,7 +140,7 @@ const DiaryComponent = ({navigation}) => {
       {isAuth ? (
         <ScrollView style={{backgroundColor: 'white'}}>
           <View style={{flexDirection: 'column-reverse'}}>
-            {renderDiary(Diaries)}
+            {renderDiary(Diaries, User)}
           </View>
         </ScrollView>
       ) : (
@@ -181,6 +183,8 @@ const DiaryComponent = ({navigation}) => {
               index: Diaries.documents.length,
               // id: 고유 index
               id: checkNextId(Diaries),
+              // user 식별자 추가 -> 폴더 구조 때문에
+              userId: User.auth.userId,
             });
           }}>
           <Text

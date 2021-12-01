@@ -1,15 +1,28 @@
-import axios from 'axios';
-import {auth} from '../../utils/misc';
+import {onValue} from 'firebase/database';
+import {ref} from 'firebase/database';
+import {database} from '../../utils/misc';
 import {GET_DIARIES} from '../types';
 
 export function getDiaries(User) {
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      console.log('user id is...', user);
-    } else {
-      console.log('not logged in');
-    }
-  });
+  // auth.onAuthStateChanged(user => {
+  //   if (user) {
+  //     console.log('user id is...', user);
+  //   } else {
+  //     console.log('not logged in');
+  //   }
+  // });
+
+  return dispatch => {
+    const url = `diary/${User.auth.userId}`;
+    const dbRef = ref(database, url);
+    // data 변화를 감지.
+    // database에서 데이터 읽는 최선의 방법.
+    // callback함수로 snapshot에 데이터가 담긴다. -> 없다면 null
+    onValue(dbRef, snapshot => {
+      const data = snapshot.val();
+      dispatch({type: GET_DIARIES, payload: data});
+    });
+  };
   // const request = axios
   //   .get(
   //     `https://hoy-diary-app-default-rtdb.asia-southeast1.firebasedatabase.app/diary.json`,
