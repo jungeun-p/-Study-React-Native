@@ -10,6 +10,7 @@ import DiaryDocu from './components/diary/diaryDocu';
 import Logo from './utils/logo';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Loading from './components/auth/Loading';
 
 const AuthStack = createStackNavigator();
 const MainScreenTab = createBottomTabNavigator();
@@ -29,7 +30,7 @@ const headerConfig = {
     color: '#fff',
   },
 };
-const isLooggedIn = false;
+// const isLooggedIn = false;
 
 const TabBarIcon = (focused, name) => {
   let iconName, iconSize, iconColor;
@@ -102,17 +103,10 @@ const AppTabComponent = () => {
 export const RootNavigator = () => {
   return (
     <AuthStack.Navigator screenOptions={{headerShown: false}}>
-      {isLooggedIn ? (
-        <AuthStack.Screen name="Main" component={AppTabComponent} />
-      ) : (
-        <>
-          <AuthStack.Screen name="Sign In" component={SignIn} />
-          <AuthStack.Screen
-            name="AppTabComponent"
-            component={AppTabComponent}
-          />
-        </>
-      )}
+      <AuthStack.Screen name="Loading" component={Loading} />
+      <AuthStack.Screen name="Main" component={AppTabComponent} />
+      <AuthStack.Screen name="AppTabComponent" component={AppTabComponent} />
+      <AuthStack.Screen name="Sign In" component={SignIn} />
     </AuthStack.Navigator>
   );
 };

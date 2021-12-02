@@ -8,7 +8,7 @@ import {useDispatch, useSelector} from 'react-redux';
 // import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
 const AuthComponent = ({navigation}) => {
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   // const user = useSelector(state => state.User);
   const {auth} = useSelector(state => state.User);
@@ -30,41 +30,30 @@ const AuthComponent = ({navigation}) => {
     // useEffect를 통해서 자동으로 asyncStorage의 토큰을 출력
     getTokens(value => {
       // token값이 null이라면 로그인 화면으로 처리
-      if (value[1][1] === null) {
-        setLoading(false);
-      } else {
+      // => Login 정보가 없을 때로 변경.
+      if (value[1][1] !== null) {
         // 자동 로그인 action 전달
         dispatch(autoSignIn(value[2][1]))
           .then(() => {
             // 현재 auth state에 토큰이 없다면
-            if (!auth?.token) {
-              setLoading(false);
-            } else {
+            // => token이 존재할 때로 변경.
+            if (auth?.token) {
               // token 갱신 후 자동으로 로그인 처리
-              setTokens(auth, goWithoutLogin());
+              setTokens(auth, () => goWithoutLogin());
             }
           })
           .catch(error => console.log(error));
       }
-      console.log('get Tokens: ', value);
     });
   }, []);
 
   return (
-    <>
-      {loading ? (
-        <View style={styles.loading}>
-          <ActivityIndicator />
-        </View>
-      ) : (
-        <ScrollView style={styles.container}>
-          <View>
-            <AuthLogo />
-            <AuthForm goWithoutLogin={goWithoutLogin} />
-          </View>
-        </ScrollView>
-      )}
-    </>
+    <ScrollView style={styles.container}>
+      <View>
+        <AuthLogo />
+        <AuthForm goWithoutLogin={goWithoutLogin} />
+      </View>
+    </ScrollView>
   );
 };
 

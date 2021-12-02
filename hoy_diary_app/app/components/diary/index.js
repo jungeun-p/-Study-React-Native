@@ -38,21 +38,18 @@ const DiaryComponent = ({navigation}) => {
         dispatch(autoSignIn(value[2][1]))
           .then(() => {
             // 현재 auth state에 토큰이 없다면
-            if (!User.auth?.token) {
+            if (!User?.auth.token) {
               manageState(false);
             } else {
               // token 갱신 후 자동으로 로그인 처리
-              setTokens(
-                User.auth,
-                manageState(true),
-                dispatch(getDiaries(User)),
-              );
+              manageState(true);
+              setTokens(User.auth, dispatch(getDiaries(User)));
             }
           })
           .catch(error => console.log(error));
       }
     });
-  }, []);
+  }, [User.auth?.token]);
 
   // jsx 반환
   const renderDiary = (Diaries, User) =>
@@ -135,7 +132,6 @@ const DiaryComponent = ({navigation}) => {
     }
   };
 
-  console.log(`diaries`, Diaries);
   return (
     <View>
       {isAuth ? (

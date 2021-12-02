@@ -1,4 +1,4 @@
-import {DataSnapshot, onValue} from 'firebase/database';
+import {onValue} from 'firebase/database';
 import {ref} from 'firebase/database';
 import {database} from '../../utils/misc';
 import {GET_DIARIES} from '../types';
