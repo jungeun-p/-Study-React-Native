@@ -51,7 +51,7 @@ const DiaryDocu = ({...props}) => {
 
   // 이미지 선택
   const selectImage = () => {
-    let imageDir = `diaryImage/index${diary.diaryData.id}`;
+    let imageDir = `index${diary.diaryData.id}`;
     launchImageLibrary(
       {
         noData: true,
@@ -74,8 +74,9 @@ const DiaryDocu = ({...props}) => {
   };
   const deleteData = async () => {
     const id = diary.diaryData.id;
-    const databaseDirectory = `diary/${id}`;
-    const storageDirectory = `diaryImage/index${id}.jpg`;
+    const userId = diary.userId;
+    const databaseDirectory = `diary/${userId}/${id}`;
+    const storageDirectory = `diaryImage/${userId}/index${id}/image.jpg`;
     const databaseRef = dbRef(database, databaseDirectory);
     const storageRef = ref(storage, storageDirectory);
 
@@ -95,11 +96,12 @@ const DiaryDocu = ({...props}) => {
 
   const uploadData = async () => {
     setDiary({...diary, isLoading: true});
+    const userId = diary.userId;
     const data = diary.diaryData;
     const id = data.id;
     // firebase 객체의 이름과 맞춰서 data
-    const dataBaseDirectory = `diary/${id}`;
-    const storageDirectory = `diaryImage/index${id}.jpg`;
+    const dataBaseDirectory = `diary/${userId}/${id}`;
+    const storageDirectory = `diaryImage/${userId}/index${id}/image.jpg`;
     try {
       // dataBase를 사용
       await set(dbRef(database, dataBaseDirectory), {data});

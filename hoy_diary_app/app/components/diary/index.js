@@ -135,6 +135,7 @@ const DiaryComponent = ({navigation}) => {
     }
   };
 
+  console.log(`diaries`, Diaries);
   return (
     <View>
       {isAuth ? (

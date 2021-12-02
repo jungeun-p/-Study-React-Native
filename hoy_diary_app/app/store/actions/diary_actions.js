@@ -1,4 +1,4 @@
-import {onValue} from 'firebase/database';
+import {DataSnapshot, onValue} from 'firebase/database';
 import {ref} from 'firebase/database';
 import {database} from '../../utils/misc';
 import {GET_DIARIES} from '../types';
@@ -19,8 +19,14 @@ export function getDiaries(User) {
     // database에서 데이터 읽는 최선의 방법.
     // callback함수로 snapshot에 데이터가 담긴다. -> 없다면 null
     onValue(dbRef, snapshot => {
-      const data = snapshot.val();
-      dispatch({type: GET_DIARIES, payload: data});
+      const diaryData = [];
+      for (let key in snapshot.val()) {
+        if (snapshot.val()[key]) {
+          diaryData.push({...snapshot.val()[key]});
+        }
+      }
+      // const data = snapshot.val();
+      dispatch({type: GET_DIARIES, payload: diaryData});
     });
   };
   // const request = axios
