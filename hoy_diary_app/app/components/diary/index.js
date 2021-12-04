@@ -7,6 +7,7 @@ import {
   Dimensions,
   StyleSheet,
   Button,
+  BackHandler,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
@@ -48,6 +49,10 @@ const DiaryComponent = ({navigation}) => {
           })
           .catch(error => console.log(error));
       }
+    });
+    // navigation back button 물리적 false
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      return true;
     });
   }, [User.auth?.token]);
 

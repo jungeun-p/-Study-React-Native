@@ -30,6 +30,20 @@ const headerConfig = {
     color: '#fff',
   },
 };
+const headerConfig_ = {
+  headerTitle: () => <Logo />,
+  headerStyle: {
+    backgroundColor: 'black',
+  },
+  headerTintColor: '#fff',
+  headerTitleStyle: {
+    textAlign: 'center',
+    flex: 1,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  headerLeft: null,
+};
 // const isLooggedIn = false;
 
 const TabBarIcon = (focused, name) => {
@@ -53,7 +67,7 @@ const DiaryStackComponent = () => {
       <DiaryStack.Screen
         name="Diary"
         component={Diary}
-        options={headerConfig}
+        options={headerConfig_}
       />
       <DiaryStack.Screen
         name="DiaryDocu"
@@ -70,7 +84,7 @@ const NewsStackComponent = () => {
       <NewsStack.Screen
         name="NewsDocu"
         component={News}
-        options={headerConfig}
+        options={headerConfig_}
       />
     </NewsStack.Navigator>
   );
@@ -104,9 +118,17 @@ export const RootNavigator = () => {
   return (
     <AuthStack.Navigator screenOptions={{headerShown: false}}>
       <AuthStack.Screen name="Loading" component={Loading} />
-      <AuthStack.Screen name="Main" component={AppTabComponent} />
-      <AuthStack.Screen name="AppTabComponent" component={AppTabComponent} />
-      <AuthStack.Screen name="Sign In" component={SignIn} />
+      {/* <AuthStack.Screen name="Main" component={AppTabComponent} /> */}
+      <AuthStack.Screen
+        name="AppTabComponent"
+        component={AppTabComponent}
+        options={{gestureEnabled: false}}
+      />
+      <AuthStack.Screen
+        name="Sign In"
+        component={SignIn}
+        options={{gestureEnabled: false}}
+      />
     </AuthStack.Navigator>
   );
 };

@@ -45,6 +45,9 @@ const AuthComponent = ({navigation}) => {
           .catch(error => console.log(error));
       }
     });
+    navigation.addListener('beforeRemove', e => {
+      e.preventDefault();
+    });
   }, []);
 
   return (
