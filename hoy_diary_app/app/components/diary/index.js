@@ -8,12 +8,15 @@ import {
   StyleSheet,
   Button,
   BackHandler,
+  Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {getDiaries} from '../../store/actions/diary_actions';
 import {autoSignIn} from '../../store/actions/user_actions';
-import {getTokens, setTokens} from '../../utils/misc';
+import {auth, getTokens, removeTokens, setTokens} from '../../utils/misc';
+import Logout from '../../assets/images/logout.png';
+import {signOut} from 'firebase/auth';
 
 const DiaryComponent = ({navigation}) => {
   const screenHeight = Dimensions.get('window').height;
@@ -136,6 +139,31 @@ const DiaryComponent = ({navigation}) => {
       return 0;
     }
   };
+
+  const headerStyle = () => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => {
+            signOut(auth)
+              .then(() => {
+                removeTokens(() => {
+                  navigation.navigate('Sign In');
+                });
+                console.log('signOut');
+              })
+              .catch(error => {
+                console.log(error);
+              });
+          }}>
+          <Text style={{fontSize: 13, paddingRight: 15, flexDirection: 'row'}}>
+            🔓
+          </Text>
+        </TouchableOpacity>
+      ),
+    });
+  };
+  headerStyle();
 
   return (
     <View>

@@ -65,3 +65,15 @@ export const getTokens = async callBack => {
   // example console.log output:
   // [ ['@MyApp_user', 'myUserValue'], ['@MyApp_key', 'myKeyValue'] ]
 };
+
+export const removeTokens = async callBack => {
+  try {
+    await AsyncStorage.multiRemove([
+      '@hoydiary_app@userId',
+      '@hoydiary_app@token',
+      '@hoydiary_app@refToken',
+    ]).then(() => {
+      callBack();
+    });
+  } catch {}
+};
