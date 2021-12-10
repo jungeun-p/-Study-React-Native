@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet, Image} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import Good from '../../assets/images/very_good.png';
-import {requestCovid} from '../../store/actions/news_actions';
+import {requestCovid, requestDust} from '../../store/actions/news_actions';
 
 const NewsComponent = () => {
   const [news, setNews] = useState({
@@ -11,8 +11,6 @@ const NewsComponent = () => {
       dateTime: '',
       confirmed: 0,
       confirmedDailyChange: 0,
-      released: 0,
-      releasedDialyChange: 0,
       deceased: 0,
       decesedDailyChange: 0,
       inProgress: 0,
@@ -30,7 +28,7 @@ const NewsComponent = () => {
     },
   });
   const dispatch = useDispatch();
-  const covidData = useSelector(state => state.News);
+  const {covid, dust} = useSelector(state => state.News);
 
   const formatDate = () => {
     let todayDate = new Date();
@@ -60,14 +58,101 @@ const NewsComponent = () => {
     let today = formatDate().today;
     let yesterday = formatDate().yesterday;
     dispatch(requestCovid(today, yesterday));
-    // makeCovidData(covidData);
-    console.log(covidData);
-  }, []);
+    dispatch(requestDust());
 
-  // const makeCovidData = data => {
-  //   let covidData;
-  //   console.log(`covidData: ${data}`);
-  // };
+    covid && makeCovidData(covid);
+    dust && makeDustData(dust.dustData, dust.item);
+
+    console.log(news);
+  }, [news.covid.dateTime, news.dust.dateTime]);
+
+  const makeCovidData = covid => {
+    let covidData;
+    for (let key in covid) {
+      covidData = covid[key];
+    }
+    let currData = covidData.body.items.item[0];
+    let prevData = covidData.body.items.item[1];
+
+    let covidCopy = news.covid;
+    covidCopy.dateTime = currData.createDt;
+    covidCopy.confirmed = addComma(currData.decideCnt); // 확진환자
+    covidCopy.deceased = addComma(currData.deathCnt); // 사망자
+    covidCopy.inProgress = addComma(currData.accExamCnt); // 검사진행
+
+    covidCopy.confirmedDailyChange = currData.decideCnt - prevData.decideCnt;
+    covidCopy.decesedDailyChange = currData.deathCnt - prevData.deathCnt;
+    covidCopy.inProgressDailyChange = currData.accExamCnt - prevData.accExamCnt;
+
+    setNews({...news, covid: covidCopy});
+  };
+
+  const addComma = data => {
+    let regExp = /\B(?=(\d{3})+(?!\d))/g;
+    return data.toString().replace(regExp, ',');
+  };
+
+  const makeDustData = (data, item) => {
+    let dustData;
+    let level;
+    for (let key in data) dustData = data[key];
+    const value = dustData.body?.items[0].seoul;
+    if (value) {
+      if (item === 'PM10') {
+        if (value <= 30) {
+          level = '좋음';
+        } else if (value > 30 && value <= 50) {
+          level = '보통';
+        } else if (value > 51 && value <= 100) {
+          level = '나쁨';
+        } else if (value > 101) {
+          level = '매우나쁨';
+        }
+        setNews({
+          ...news,
+          dust: {
+            dateTime: dustData.body.items[0].dataTime,
+            fineDust: value,
+            fineDustLevel: level,
+          },
+        });
+      } else if (item === 'PM25') {
+        if (value <= 15) {
+          level = '좋음';
+        } else if (value > 15 && value <= 25) {
+          level = '보통';
+        } else if (value > 25 && value <= 50) {
+          level = '나쁨';
+        } else if (value > 51) {
+          level = '매우나쁨';
+        }
+        setNews({
+          ...news,
+          dust: {
+            ultraFineDust: value,
+            ultraFineDustLevel: level,
+          },
+        });
+      } else if (item === 'NO2') {
+        if (value <= 0.03) {
+          level = '좋음';
+        } else if (value > 0.03 && value <= 0.06) {
+          level = '보통';
+        } else if (value > 0.06 && value <= 0.2) {
+          level = '나쁨';
+        } else if (value > 0.2) {
+          level = '매우나쁨';
+        }
+        setNews({
+          ...news,
+          dust: {
+            nitrogenDioxide: value,
+            nitrogenDioxideLevel: level,
+          },
+        });
+      }
+    }
+  };
 
   return (
     <View style={styles.newsContainer}>
